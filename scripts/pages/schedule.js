@@ -1,98 +1,34 @@
-﻿var schedule = [
-    {
-        "id": "session-1",
-        "title": "Registration",
-        "tracks": [1, 2]
-    },
-    {
-        "id": "session-2",
-        "title": "Moving the Web forward with HTML5",
-        "tracks": [1, 2]
-    },
-    {
-        "id": "session-3",
-        "title": "Diving in at the deep end with Canvas",
-        "tracks": [1]
-    },
-    {
-        "id": "session-4",
-        "title": "New Technologies in Enterprise",
-        "tracks": [2]
-    },
-    {
-        "id": "session-5",
-        "title": "WebSockets and You",
-        "tracks": [1]
-    },
-    {
-        "id": "session-6",
-        "title": "Coffee and Cake Break",
-        "tracks": [1, 2]
-    },
-    {
-        "id": "session-7",
-        "title": "Building Responsive UIs",
-        "tracks": [1]
-    },
-    {
-        "id": "session-8",
-        "title": "Fun with Forms (no, really!)",
-        "tracks": [2]
-    },
-    {
-        "id": "session-9",
-        "title": "A Fresh Look at Layouts",
-        "tracks": [1]
-    },
-    {
-        "id": "session-10",
-        "title": "Real-world Applications of HTML5 APIs",
-        "tracks": [2]
-    },
-    {
-        "id": "session-11",
-        "title": "Lunch",
-        "tracks": [1, 2]
-    },
-    {
-        "id": "session-12",
-        "title": "Getting to Grips with JavaScript",
-        "tracks": [1]
-    },
-    {
-        "id": "session-13",
-        "title": "Transforms and Animations",
-        "tracks": [2]
-    },
-    {
-        "id": "session-14",
-        "title": "Web Design Adventures with CSS3",
-        "tracks": [1]
-    },
-    {
-        "id": "session-15",
-        "title": "Introducing Data Access and Caching",
-        "tracks": [2]
-    },
-    {
-        "id": "session-16",
-        "title": "Closing Thanks and Prizes",
-        "tracks": [1, 2]
-    }
-];
-
-
-// TODO: Task 2 - Get the "schedule" list element from the document
+﻿var schedule = [];
 var list = document.getElementById("schedule");
 var track1CheckBox = document.getElementById("show-track-1");
 var track2CheckBox = document.getElementById("show-track-2");
 
+function downloadSchedule() {
+    $.ajax({
+        type: "GET",
+        url: "/schedule/list"
+    }).done(function (response) {
+        schedule = response.schedule;
+        displaySchedule();
+    }).fail(function () {
+        alert("Schedule list not available.");
+    });
+}
+
 function createSessionElement(session) {
-    // TODO: Task 3 - Create a <li> element for the session.
-    //       Add the session title as the <li> text content
-    //       Return the <li> element
     var li = document.createElement("li");
-    li.textContent = session.title;
+
+    li.sessionId = session.id;
+
+    var star = document.createElement("a");
+    star.setAttribute("href", "#");
+    star.setAttribute("class", "star");
+    li.appendChild(star);
+
+    var title = document.createElement("span");
+    title.textContent = session.title;
+    li.appendChild(title);
+
     return li;
 };
 
@@ -103,30 +39,58 @@ function clearList() {
 }
 
 function displaySchedule() {
-    // TODO: Task 4 - Loop through the schedule array
-    //       Create session elements
-    //       Append the elements to the list   
-
     clearList();
     for (var i = 0; i < schedule.length; i++) {
         var tracks = schedule[i].tracks;
-
-        if ((track1CheckBox.checked && tracks.indexOf(1) >= 0) || (track2CheckBox.checked && tracks.indexOf(2) >= 0)) {
+        var isCurrentTrack = (track1CheckBox.checked && tracks.indexOf(1) >= 0) ||
+                             (track2CheckBox.checked && tracks.indexOf(2) >= 0);
+        if (isCurrentTrack) {
             var li = createSessionElement(schedule[i]);
             list.appendChild(li);
         }
     }
 }
 
-displaySchedule();
+function saveStar(sessionId, isStarred) {
+    $.ajax({
+        type: "POST",
+        url: "/schedule/star/" + sessionId,
+        data: { starred: isStarred }
+    }).done(function (response) {
+        if (isStarred && response.starCount > 50) {
+            alert("This session is very popular! Be sure to arrive early to get a seat.");
+        }
+    });
+}
+
+
+function handleListClick(event) {
+    var isStarElement = event.srcElement.classList.contains("star");
+    if (isStarElement) {
+        event.preventDefault(); // Stop the browser following the clicked <a> element's href.
+
+        var listItem = event.srcElement.parentNode;
+        if (listItem.classList.contains("starred")) {
+            listItem.classList.remove("starred");
+            saveStar(listItem.sessionId, false);
+        } else {
+            listItem.classList.add("starred");
+            saveStar(listItem.sessionId, true);
+        }
+    }
+}
+
 track1CheckBox.addEventListener("click", displaySchedule, false);
 track2CheckBox.addEventListener("click", displaySchedule, false);
+list.addEventListener("click", handleListClick, false);
+
+downloadSchedule();
 // SIG // Begin signature block
 // SIG // MIIaVgYJKoZIhvcNAQcCoIIaRzCCGkMCAQExCzAJBgUr
 // SIG // DgMCGgUAMGcGCisGAQQBgjcCAQSgWTBXMDIGCisGAQQB
 // SIG // gjcCAR4wJAIBAQQQEODJBs441BGiowAQS9NQkAIBAAIB
-// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFBwI1Tpqf6h3
-// SIG // 33yZ3Lo4Tcr+DaYxoIIVJjCCBJkwggOBoAMCAQICEzMA
+// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFAwcCUrmEhuP
+// SIG // 9AzbHdLWWoOleNFJoIIVJjCCBJkwggOBoAMCAQICEzMA
 // SIG // AACdHo0nrrjz2DgAAQAAAJ0wDQYJKoZIhvcNAQEFBQAw
 // SIG // eTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0
 // SIG // b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1p
@@ -298,33 +262,33 @@ track2CheckBox.addEventListener("click", displaySchedule, false);
 // SIG // rrjz2DgAAQAAAJ0wCQYFKw4DAhoFAKCBvjAZBgkqhkiG
 // SIG // 9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgEL
 // SIG // MQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-// SIG // x1akBvkUDdGjlbnjWeKW/NwfC0swXgYKKwYBBAGCNwIB
+// SIG // LvwKtBPt+6gBhW4I44IQEd+j4LYwXgYKKwYBBAGCNwIB
 // SIG // DDFQME6gJoAkAE0AaQBjAHIAbwBzAG8AZgB0ACAATABl
 // SIG // AGEAcgBuAGkAbgBnoSSAImh0dHA6Ly93d3cubWljcm9z
 // SIG // b2Z0LmNvbS9sZWFybmluZyAwDQYJKoZIhvcNAQEBBQAE
-// SIG // ggEAgtmRbonl60J/3fHzPQhfYuVU+fvE8CMbudagvWru
-// SIG // x5tdMOnZoMY1IywBpaEq4MFEhoHhDwxL5hKqAQofZ78H
-// SIG // wBl+NzyPMaATauIP9DIWKb3eFL8qUYsIoKgMw0BwYlt9
-// SIG // 2BgNnNnjiHkyQPCZr6QtI8WUmJkIu0YAOsNqTjrtFlA/
-// SIG // UkkclTIWIVAmhrGSBzx+GYcaXY4W89clNzed1gInKuDt
-// SIG // 43G8NngFLszvgAfAMfPVwKSb4k62yICcC111uPiylxCH
-// SIG // pUTh0oqtvs2GUXfJDnmKgmLiTeVwMHYgEnq7UG4RoBwm
-// SIG // nfO7ZsgBDrigBm2w5i9cVfiUU1AzyxS2OD8WJKGCAh8w
+// SIG // ggEAp9CA/Qer4baPZZQdWVTq2XH7XgrHdNQJikbde34Q
+// SIG // 11l2ahRBaKagYHLFAGYBs384XIwHSL+1pygwfemXdXyn
+// SIG // GsprQmfXal509C0Dr2R2Ftb2ln8Tpl4lOrwhMYBhmgTm
+// SIG // WnT3KQSelJqYJMT89txrEpLMbPL+WOjjwiriAuYiPzVu
+// SIG // CALtv5MwL6IV8jpl5TGxEyBSxXtZgM/KolzkzaD+Gsd9
+// SIG // 3E6xks2p7wlYKuag0KMV9Pwobq+fJ0NJu/jE5qtQFa0k
+// SIG // voI6riWpdvOx3Nta9Fvp07zLoXwUJ/iI6FwEdsu+s0Of
+// SIG // dLRTp1Z/ELM+pC/LJVoe38RO4d2Nonkdy0MJnqGCAh8w
 // SIG // ggIbBgkqhkiG9w0BCQYxggIMMIICCAIBATCBhTB3MQsw
 // SIG // CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQ
 // SIG // MA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9z
 // SIG // b2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3Nv
 // SIG // ZnQgVGltZS1TdGFtcCBQQ0ECCmECjkIAAAAAAB8wCQYF
 // SIG // Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-// SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTExNDIzNDQ1M1ow
-// SIG // IwYJKoZIhvcNAQkEMRYEFAAY0THR9ZJFHRz/LbIm5Rt2
-// SIG // zWJIMA0GCSqGSIb3DQEBBQUABIIBABfscaw4pFq6driP
-// SIG // JVYp3JkXaGOm/c5R1wEWO3t8EDIoA5wKR0jADAHM888H
-// SIG // wJrHmdwshofLJEfpmzJrUzynfPxckiNqHGFlzzwAd29p
-// SIG // gs9BBmYy4EG8My4fwTBeTPLzTA6BHMKD4j/DBOoNrnRN
-// SIG // j/wngrK03iDU5jWXz9C3JKcZ9rynuPp4raArwpnE4vFR
-// SIG // uqXpUwq1z7cnaOAbl/mv43oszAUcGGvYHPRM1yW4UYnN
-// SIG // MSBGWcIc52bgo3OL1mB6PFA0W2FWf9hB6gWBqUiy+EzF
-// SIG // PSDvLzhFY2MtSURzPruBj+9xk03i4q4cGBbXeAasjJ5d
-// SIG // 2TjAQfrWQ3qu7LQUvuQ=
+// SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTEyNjE4MTUwMVow
+// SIG // IwYJKoZIhvcNAQkEMRYEFHjVFRt0Lqj11nBnydSVsy+E
+// SIG // n8v8MA0GCSqGSIb3DQEBBQUABIIBAF5PJ7aD1V4sNpUh
+// SIG // wZbMIIdaswYMzPb3bg4G2fXV5d+WDN33atLh+MIDVtrW
+// SIG // eVj4avj6SxWQoMo+RxYJvD6Kc4cLGo4at6aiQQUHKqwr
+// SIG // 1dZDn6/y+UAA+G+Zzy+gYYW5IeeEzV2seRChLl3ome1m
+// SIG // dbPEy7AIPqV8/+36g0nfnpnsSJBJ8nrXnjz9vDfHqkSG
+// SIG // DNQI+i8Mm8TjsUSqdExTBtEY40hwHJBOPbre0VGrH+XH
+// SIG // lxJ+CTEDbfnjuDL+RlLiNy8+1K4IuPWotGgwNWirigmy
+// SIG // WO7RA2yPQuLoTzcE9Z7hCUF8aY5c9Qzqhu0uOaWxIEKu
+// SIG // fnDdoaFj1Ww6jSfpU5s=
 // SIG // End signature block
