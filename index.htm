@@ -4,11 +4,15 @@
     <title>ContosoConf Home</title>
     <meta charset="utf-8" />
     <link href="/styles/site.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/nav.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/header.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/footer.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/pages/index.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <nav class="page-nav">
         <div class="container">
-            <a href="/index.htm">Home</a>
+            <a href="/index.htm" class="active">Home</a>
             <a href="/about.htm">About</a>
             <a href="/schedule.htm">Schedule</a>
             <a href="/register.htm">Register</a>
@@ -16,8 +20,14 @@
     </nav>
     <div class="container">
         <header class="page-header">
-            <h1>ContosoConf</h1>
-            <p>A two-track conference on the latest HTML5 developments</p>
+            <div class="container">
+                <h1>ContosoConf</h1>
+                <p class="tag-line">  A two-track conference on the latest HTML5 developments </p>
+                <a class="register" href="/register.htm">
+                    Register<br />
+                    <span class="free">&#183; Free &#183;</span>
+                </a>
+            </div>
         </header>
         <article>
 

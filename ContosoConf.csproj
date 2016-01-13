@@ -136,6 +136,13 @@
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\pages\register.js" />
     <Content Include="scripts\pages\schedule.js" />
+    <Content Include="styles\footer.css" />
+    <Content Include="styles\header.css" />
+    <Content Include="styles\nav.css" />
+    <Content Include="styles\pages\about.css" />
+    <Content Include="styles\pages\index.css" />
+    <Content Include="styles\pages\register.css" />
+    <Content Include="styles\pages\schedule.css" />
     <Content Include="styles\site.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -167,7 +174,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="styles\pages\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
