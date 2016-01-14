@@ -153,6 +153,7 @@
     <Content Include="scripts\pages\schedule.js" />
     <Content Include="styles\footer.css" />
     <Content Include="styles\header.css" />
+    <Content Include="styles\mobile.css" />
     <Content Include="styles\nav.css" />
     <Content Include="styles\pages\about.css" />
     <Content Include="styles\pages\index.css" />
@@ -160,6 +161,7 @@
     <Content Include="styles\pages\register.css" />
     <Content Include="styles\pages\schedule.css" />
     <Content Include="styles\pages\speaker-badge.css" />
+    <Content Include="styles\print.css" />
     <Content Include="styles\site.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -178,6 +180,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="appcache.manifest" />
     <None Include="Properties\PublishProfiles\evanjdudley - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\evanjdudley - Web Deploy.pubxml" />
     <Content Include="Views\Registration\Error.cshtml" />

@@ -19,21 +19,28 @@
         }
     };
 
-
     // TODO: if currently offline, hide navigation links that require online
+    if (!navigator.onLine) {
+        hideLinksThatRequireOnline();
+    }
+
 
     // TODO: add onoffline and ononline events to document.body,
     //       which either hide or show navigation links.
+    document.body.onoffline = hideLinksThatRequireOnline;
+    document.body.ononline = showLinks;
 
     // TODO: also handle the applicationCache error event to hide links
-    
-} ());
+    // Error fetching appcache.manifest: so we are probably offline
+    applicationCache.addEventListener("error", hideLinksThatRequireOnline, false);
+
+}());
 // SIG // Begin signature block
 // SIG // MIIaVgYJKoZIhvcNAQcCoIIaRzCCGkMCAQExCzAJBgUr
 // SIG // DgMCGgUAMGcGCisGAQQBgjcCAQSgWTBXMDIGCisGAQQB
 // SIG // gjcCAR4wJAIBAQQQEODJBs441BGiowAQS9NQkAIBAAIB
-// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFERZMP72GUc1
-// SIG // RcH2fgK7zv/wgrqmoIIVJjCCBJkwggOBoAMCAQICEzMA
+// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFF+G8yNjMx2D
+// SIG // c+ohYQ/rvroogpMsoIIVJjCCBJkwggOBoAMCAQICEzMA
 // SIG // AACdHo0nrrjz2DgAAQAAAJ0wDQYJKoZIhvcNAQEFBQAw
 // SIG // eTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0
 // SIG // b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1p
@@ -205,33 +212,33 @@
 // SIG // rrjz2DgAAQAAAJ0wCQYFKw4DAhoFAKCBvjAZBgkqhkiG
 // SIG // 9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgEL
 // SIG // MQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-// SIG // AxiepuiJbAgouaLBGcoj8SVjEpQwXgYKKwYBBAGCNwIB
+// SIG // Ap21QC1HryHrcb/SL3aCHhKw7XYwXgYKKwYBBAGCNwIB
 // SIG // DDFQME6gJoAkAE0AaQBjAHIAbwBzAG8AZgB0ACAATABl
 // SIG // AGEAcgBuAGkAbgBnoSSAImh0dHA6Ly93d3cubWljcm9z
 // SIG // b2Z0LmNvbS9sZWFybmluZyAwDQYJKoZIhvcNAQEBBQAE
-// SIG // ggEAA0VFYPW95Lx2Vx5Mnx3legCxRwCXqR1557lw0FGy
-// SIG // uNIizTmpBN5JvTc3oDSLJpo5UmPXmzQw8mq9wk/ks40V
-// SIG // NuSoXkKNU4BZwgP7ywvXRUA16w7AFff81e0psB9o5Ftj
-// SIG // QGj/AcN/uuYkFt3DvGZ92nAVdRpqvYUNAaCfU/iyy30H
-// SIG // UvZmzEyyC6pEjN/uL3zVam12p6xHmHtOjTNkuPntLfMS
-// SIG // gmkkLG3fJrnBQaEJid7pPV0zv1boN0Ds4DRMHpg9m5Hg
-// SIG // VFbYZLwnXt72snAw4p7te6ONcMD7J3ElwXF5+/kIky5l
-// SIG // mkB7Mp/ueFmzLYa+giaI8vIgaBFS3nuX53SRxqGCAh8w
+// SIG // ggEADHl0LccgIKDLTwaCCXw7nJt9m66T6UbxSGPk3O7k
+// SIG // y3kO22ywu0skVk8ZgIPdjutpqiL3IjSu17itQZ7OGdws
+// SIG // H5NsliiEN1TRdnbMNQ1ngoKXkM2IhRQid/TMA/qlD+9g
+// SIG // dMmjKs+G7IX3L9YphOzxVOSqW1V3EdFfpYUyIQh4YL1T
+// SIG // jp7G4PlR/elKaKkA6a9hgaYTIOGLsLyv8tFgR1eYovF0
+// SIG // O8m/A+1Stz5hyX3Nzpr7g9HW5rUIDO53fxeDb6kEGN+f
+// SIG // 1J6d4T+zuMsR+XpxqoOxr4vSF2SRY4Lwj4JdQ2CO65jf
+// SIG // JAjy3GSe6q0l3WBcHrcSifdUVVIa2ZGnJ7oRCKGCAh8w
 // SIG // ggIbBgkqhkiG9w0BCQYxggIMMIICCAIBATCBhTB3MQsw
 // SIG // CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQ
 // SIG // MA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9z
 // SIG // b2Z0IENvcnBvcmF0aW9uMSEwHwYDVQQDExhNaWNyb3Nv
 // SIG // ZnQgVGltZS1TdGFtcCBQQ0ECCmECkkoAAAAAACAwCQYF
 // SIG // Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-// SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTExNDIzNTc1OFow
-// SIG // IwYJKoZIhvcNAQkEMRYEFMZ2Bm1jHudEJjiOGgMLj5f5
-// SIG // f+irMA0GCSqGSIb3DQEBBQUABIIBAMKBLMxFrxvXO7Us
-// SIG // xpovY0lqloD3Hh3vn5QEVNtc81wT0QuoYfa0am9/htkS
-// SIG // Pp0tzI4E38qqr7vpKVDl2o/oEVbbPqQKZkctf999k576
-// SIG // Ij9ydnd1dxuWq+iVgKH7Fn1FSAQPN4WGBOGUmrhdKzEQ
-// SIG // LaNOoApMC0kJ7sVtX7kFJ9r/kDV4JCexKd6huP/jBiHN
-// SIG // 8lkZQYS3ZpKLV68Iaedk+4rvScT1pms5xUiTpJjBw4cK
-// SIG // PVA/kCV/dPP7Ph6+Rei37jLlCib/wGURUF/ah+dGO0o0
-// SIG // VSiys1Ay77bGzZiMEnqz7WqpDLQhjqwWGoG9jKQj8WmO
-// SIG // WSn0xvlwxWDaa5ISisw=
+// SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTExNDIzNTc1NFow
+// SIG // IwYJKoZIhvcNAQkEMRYEFDqzauuRIOaiLH6j/hMFCv8t
+// SIG // 5POBMA0GCSqGSIb3DQEBBQUABIIBALTUYhUhM6LZjSNq
+// SIG // RmSDmNJAgVN4Zu6itVc2qFYriF0CMHyhk1C2bswWr6AQ
+// SIG // JZEqsxYsndT5jFJjSto6Dh9DwC+Mj8mcos8sQ8S5xmZr
+// SIG // VdaeRtZOi+6kfywgK7KAHVrWxo9jHF5i85jDKyeQpIRX
+// SIG // 5Kv3843wcUmYin+pbUjlJzcTrbnoNomJ8GMRjaL4lW5r
+// SIG // 7xBv7HLq8HLZofKcXpG7UpBUGE2lz+d5UMJ8WE4opH7r
+// SIG // j6/GUUWHEadb/kEADcz4snxwuXcmjbVNdsovSJZrUAcY
+// SIG // B/AGAvBCXJUqpDRdqvE9IFNmNeMMarw5plvtEbY5Ucwk
+// SIG // Jt2+6VbG7WgoIFQbnOM=
 // SIG // End signature block
