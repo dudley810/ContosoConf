@@ -29,8 +29,8 @@
 
     var updateUIForPosition = function (position) {
         // TODO: Calculate the distance from the conference
-        // var distance = ... ;
-        
+        var distance = distanceFromConference(position.coords);
+
         showDistanceMessage(distance);
         var isNearToConference = distance < maximumDistanceInMilesFromConferenceToShowVenue;
         if (isNearToConference) {
@@ -44,14 +44,15 @@
 
     // TODO: Get current position from the geolocation API.
     //       Call updateUIForPosition for success and error for failure.
+    navigator.geolocation.getCurrentPosition(updateUIForPosition, error);
 
-} ());
+}());
 // SIG // Begin signature block
 // SIG // MIIaVgYJKoZIhvcNAQcCoIIaRzCCGkMCAQExCzAJBgUr
 // SIG // DgMCGgUAMGcGCisGAQQBgjcCAQSgWTBXMDIGCisGAQQB
 // SIG // gjcCAR4wJAIBAQQQEODJBs441BGiowAQS9NQkAIBAAIB
-// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFIAdlF5JctYC
-// SIG // fYfSFNFsQSdQOp3BoIIVJjCCBJkwggOBoAMCAQICEzMA
+// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFIB5BDhk5C3c
+// SIG // phMUm572XXQD9iHQoIIVJjCCBJkwggOBoAMCAQICEzMA
 // SIG // AACdHo0nrrjz2DgAAQAAAJ0wDQYJKoZIhvcNAQEFBQAw
 // SIG // eTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0
 // SIG // b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1p
@@ -223,18 +224,18 @@
 // SIG // rrjz2DgAAQAAAJ0wCQYFKw4DAhoFAKCBvjAZBgkqhkiG
 // SIG // 9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgEL
 // SIG // MQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-// SIG // ZOpPQYs/8q81rdOv8Z37rljs028wXgYKKwYBBAGCNwIB
+// SIG // 8jZb9vnaNcdDPifL1YsFI5lvdwMwXgYKKwYBBAGCNwIB
 // SIG // DDFQME6gJoAkAE0AaQBjAHIAbwBzAG8AZgB0ACAATABl
 // SIG // AGEAcgBuAGkAbgBnoSSAImh0dHA6Ly93d3cubWljcm9z
 // SIG // b2Z0LmNvbS9sZWFybmluZyAwDQYJKoZIhvcNAQEBBQAE
-// SIG // ggEAE6t8Om/HXJlA7PXqYGoVBLE0tpnJisd74CtDliMc
-// SIG // es24c+aNRSAfX8PaJkB6Fq+yxhGS4rO26d/xM33CU4n1
-// SIG // BldYTV6Hic/LHVpMp0QCwyqeBm5HxPLwZDwnXHc8ynhd
-// SIG // 4JcO/TMXnYho7KeVsS8GtbtlmXwKeQ43MoCwPvsGpLPR
-// SIG // JLeF3m0MIf147/CTOAoBpCpZ5/aiSTUTRuDoM6BVTnfj
-// SIG // Xr300sFf/UQMkDW4DyCrKxZ1qMKjkHSHkCgQRg1vQ/cZ
-// SIG // zyqT2e8DYluXoegwn2iZB7q/WZzDjEcc6VPoTINuV27e
-// SIG // lFMPa8tyU6Wzimb8xYyN7MtjqrAXbcEvEnbkU6GCAh8w
+// SIG // ggEAVtIzhJdM+iAZ5WPvgiKSmnsqH1YMgyLVnyb1G390
+// SIG // kFcw/JKtt7tJvD8Jd1vOmNixIpOY2PhFJQ/lUQ1P6P2n
+// SIG // kh9DiXFUkCc/TzgiPdre1cG3i/3u79M8nNIZPu4+GP8U
+// SIG // MqcKu7+wlmN2vS0pFVbjTak8Jfg+flP+P37q3yLMpQV0
+// SIG // HEJLJ0vhvqmiz2iL9Ww8bWUD+ZD5myjb9zX0o3p00T2L
+// SIG // Eg4IWOXNsGkch0Vfiwy2uIoklWyh9F3OD7IY1NC/MHwB
+// SIG // mtQjgJ+vEgLkm6imXWNQqEiKHnqJKO3s/dcg+iIKtUHv
+// SIG // aS2sep/FUOnRg5QJKPA+8FXprR51guNP9RoFwaGCAh8w
 // SIG // ggIbBgkqhkiG9w0BCQYxggIMMIICCAIBATCBhTB3MQsw
 // SIG // CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQ
 // SIG // MA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9z
@@ -242,14 +243,14 @@
 // SIG // ZnQgVGltZS1TdGFtcCBQQ0ECCmECkkoAAAAAACAwCQYF
 // SIG // Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
 // SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTExNDIzNTc0OFow
-// SIG // IwYJKoZIhvcNAQkEMRYEFLQol7DwJZxVZgTzConh+SMV
-// SIG // m1aPMA0GCSqGSIb3DQEBBQUABIIBADzd2iK96LS9v2t+
-// SIG // 5CErRVJGnoe+2IvBLD1xsUUKXsi/86CeTwiCDpARX1j/
-// SIG // O1peXZwP+wqUJTrwqQhbbmXdF3mUvrGkMH2VJVI955G+
-// SIG // daFSavefSx1Tm2zMsksNexsaamqoI/XLB8Hzsni9Ocht
-// SIG // jPOnhvHINjPyGc5ytpYjrIZyXLYVPw//Zi/AvliP/KeN
-// SIG // b255SZPZRqwXMZLqIvCzX0ugXqEH0v0V9m/qfVzUBOVY
-// SIG // MYBU+mPZm3l1JQaugrT5t6EObF3rPFgemCHE93JeHzen
-// SIG // xie6Yufe/M4WJXi+hxYtDAYkeZ2212bUWTcV5zy0Y/uv
-// SIG // PJkjSggdtnbqiqv+F2s=
+// SIG // IwYJKoZIhvcNAQkEMRYEFPuM64pBKMQfCF22fIa4VFRA
+// SIG // Cb6/MA0GCSqGSIb3DQEBBQUABIIBABoUK84U9MI4m+Hi
+// SIG // mhBwtQ3fGDODyjxYAKn0ygbrmHij3PtCe1e4HTzjZSU+
+// SIG // lhP1qlKHA2OnQ0RmvGrNr9icwKiPSHI+fE0r1wFakTVA
+// SIG // AmKdc/JZaXZzO4GoLv/a3NKU2afJa9WxFD8xDLkMeYBw
+// SIG // Ljg+cMHEykbrQ0EeQef8shVcgk3SU+WZ4V9OmAB9/8gY
+// SIG // U+eW4EwEGonaNBr+tzcIpSzUF7hS6Y31ew1uZUhFSCrD
+// SIG // LOChlR+rhEebF5TVvVxxlDBYnROK9A/p6KlfIKj0OWCl
+// SIG // TRSHO3VeFUmJRgsLiLUixsXyhxX1puE9py5YXI6D7p66
+// SIG // 6mjUhmfdcLxrwecLrFM=
 // SIG // End signature block
