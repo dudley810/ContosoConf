@@ -4,8 +4,7 @@
     list-style-type: none;
     padding: 0;
     display: -ms-flexbox;
-    /*display: -webkit-flexbox;*/
-    /*display: flexbox;*/
+    display: -webkit-box;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
@@ -29,9 +28,8 @@
     list-style-type: none;
     padding: 0;
     display: -ms-flexbox;
-    /*display: -webkit-flexbox;
-    display: flexbox;*/
-    -ms-flex-wrap: wrap;
+    display: -webkit-box;
+   -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
 
