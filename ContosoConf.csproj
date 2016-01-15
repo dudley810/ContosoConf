@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="about.htm" />
+    <Content Include="feedback.htm" />
     <Content Include="Global.asax" />
     <Content Include="images\speakers\april-meyer.jpg" />
     <Content Include="images\speakers\david-alexander.jpg" />
@@ -135,12 +136,14 @@
     <Content Include="scripts\jquery-2.2.0.min.js" />
     <Content Include="scripts\jquery.min.js" />
     <Content Include="scripts\LocalStarStorage.js" />
+    <Content Include="scripts\pages\feedback.js" />
     <Content Include="scripts\pages\location-venue.js" />
     <Content Include="scripts\Object.inherit.js" />
     <Content Include="scripts\offline.js" />
     <Content Include="scripts\pages\location.js" />
     <Content Include="scripts\pages\speaker-badge.js" />
     <Content Include="scripts\pages\video.js" />
+    <Content Include="scripts\StarRatingView.js" />
     <Content Include="scripts\_namespace.js" />
     <Content Include="speaker-badge.htm" />
     <Content Include="styles\images\stars.png" />
@@ -157,6 +160,7 @@
     <Content Include="styles\mobile.css" />
     <Content Include="styles\nav.css" />
     <Content Include="styles\pages\about.css" />
+    <Content Include="styles\pages\feedback.css" />
     <Content Include="styles\pages\index.css" />
     <Content Include="styles\pages\location.css" />
     <Content Include="styles\pages\register.css" />
@@ -181,7 +185,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="appcache.manifest" />
+    <None Include="appcache.manifest_notused" />
     <None Include="Properties\PublishProfiles\evanjdudley - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\evanjdudley - Web Deploy.pubxml" />
     <Content Include="Views\Registration\Error.cshtml" />

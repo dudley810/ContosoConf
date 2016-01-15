@@ -1,5 +1,9 @@
+/* Styles for the page header */
+
 header.page-header {
     height: 20rem;
+    background-repeat: repeat-x;
+    background-position: left bottom;
     border-bottom: 4px solid #1d1d1d;
 }
 
@@ -19,52 +23,53 @@ header.page-header p {
     font-style: italic;
 }
 
+
 header.page-header .register {
     display: block;
     position: absolute;
-
-    top: 2rem;
-    right: 3.5rem;
-    width: 16rem;
-    height: 10rem;
-    padding-top: 6rem;
-
+    top: 20px;
+    right: 35px;
+    width: 160px;
+    height: 100px;
+    padding-top: 60px;
+    opacity: 0.8;
     font-size: 2.7rem;
+    color: #fff;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
-    text-shadow: 0 1px 0 #000;
-    color: #fff;
-
-    /*background: -ms-linear-gradient(#a80000, #740404);*/
-    background: linear-gradient(#a80000, #740404);
-     
-    /* Create a circle */
-   /*-ms-border-radius: 100%;*/
+    /* Rounded corners to create circle */
     border-radius: 100%;
-
-    /*-ms-transform: rotate(6deg);*/
+    text-shadow: 0 1px 0 #000;
     transform: rotate(6deg);
+    background: -ms-linear-gradient(#a80000, #740404);
+    background: linear-gradient(#a80000, #740404);
+
+    /* TODO: Transition the transform property over 1 second */
+    transition: transform 1s;
 }
 
-/* TODO: header.page-header .register:hover */
 header.page-header .register:hover {
-    /*background: -ms-linear-gradient(#bc0101, #8c0909);*/
+    color: #fff;
+    background: -ms-linear-gradient(#bc0101, #8c0909);
     background: linear-gradient(#bc0101, #8c0909);
+
+    /* TODO: rotate to 16 degrees and scale by 1.1 */
+    transform: rotate(16deg) scale(1.1,1.1);
+
+    /* TODO: Transition the transform property over 1 second */
+    transition: transform 1s;
 }
 
-/* TODO: header.page-header .register:before */
-header.page-header .register:before {
-    /* Create a dotted circle */
+header.page-header .register:before /* Creates dotted border */ {
     display: block;
     position: absolute;
-    top: -.7rem;
-    right: -.7rem;
-    height: 16.8rem;
-    width: 16.8rem;
+    top: -7px;
+    right: -7px;
+    height: 168px;
+    width: 168px;
     content: "";
     border: 3px dotted #740404;
-    /*  -ms-border-radius: 100%;*/
     border-radius: 100%;
 }
 
