@@ -135,6 +135,7 @@
     <Content Include="scripts\jquery-2.2.0.min.js" />
     <Content Include="scripts\jquery.min.js" />
     <Content Include="scripts\LocalStarStorage.js" />
+    <Content Include="scripts\pages\location-venue.js" />
     <Content Include="scripts\Object.inherit.js" />
     <Content Include="scripts\offline.js" />
     <Content Include="scripts\pages\location.js" />

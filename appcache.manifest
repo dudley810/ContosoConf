@@ -5,7 +5,6 @@
 /about.htm
 /location.htm
 /schedule.htm
-/speaker-badge.htm
 
 /schedule/list
 
@@ -30,6 +29,7 @@
 /scripts/offline.js
 
 /scripts/pages/location.js
+/scripts/pages/location-venue.js
 /scripts/pages/schedule.js
 
 /styles/footer.css

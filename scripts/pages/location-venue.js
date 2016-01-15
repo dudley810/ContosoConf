@@ -1,204 +1,35 @@
-﻿/// <reference path="../_namespace.js" />
-(function () {
-    var speakerBadgePage = Object.inherit({
+﻿(function () {
 
-        initialize: function (element) {
-            this.canvas = element.querySelector("canvas");
-            this.inputSpeakerName = element.querySelector("input");
-            this.btnchangename = element.querySelector("button");
+    var currentInfoDiv = document.getElementById("instruction");
 
-            this.speakerId = this.canvas.getAttribute("data-speaker-id");
-            this.speakerName = this.canvas.getAttribute("data-speaker-name");
-            this.canvas.addEventListener("dragover", this.handleDragOver.bind(this));
-            this.canvas.addEventListener("drop", this.handleDrop.bind(this));
-            this.btnchangename.addEventListener("click", this.setBadgeName.bind(this));
-
-            this.drawBadge();
-        },
-
-        setBadgeName: function (event) {
-            this.speakerName = this.inputSpeakerName.value;
-            this.drawBadge();
-        },
-
-        handleDragOver: function (event) {
-            event.stopPropagation();
-            event.preventDefault();
-            event.dataTransfer.dropEffect = 'copy'; // Makes the browser display a "copy" cursor.
-        },
-
-        handleDrop: function (event) {
-            event.stopPropagation();
-            event.preventDefault();
-
-            var files = event.dataTransfer.files;
-            if (files.length == 0) return;
-
-            // More than one file could have been dropped, we'll just use the first.
-            var file = files[0];
-            if (this.isImageType(file.type)) {
-                this.readFile(file)
-                    .pipe(this.loadImage)
-                    .done(this.drawBadge);
-            } else {
-                alert("Please drop an image file.");
-            }
-        },
-
-        drawBadge: function (image) {
-            // TODO: Get the canvas's (this.canvas) context and assign to this.context
-            this.context = this.canvas.getContext("2d");
-
-            // TODO: Draw the following by calling the helper methods of `this`
-            //       background
-            //       top text
-            //       speaker name
-            //       image (or placeholder if no image)
-            //       bar code (passing this.speakerId)
-            this.drawBackground();
-            this.drawTopText();
-            this.drawSpeakerName();
-            if (image) {
-                this.drawSpeakerImage(image);
-            } else {
-                this.drawImagePlaceholder();
-            }
-            this.drawBarCode(this.speakerId);
-        },
-
-        drawBackground: function () {
-            // TODO: Fill the canvas with a white rectangle
-            this.context.fillStyle = "white";
-            this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        },
-
-        drawSpeakerImage: function (image) {
-            // TODO: Draw the image on the canvas
-            //       Draw only the center square of the image
-            //       Draw at:
-            //       x, y = 20, 20
-            //       w, h = 160, 160
-            var size = Math.min(image.width, image.height);
-            var sourceX = image.width / 2 - size / 2;
-            var sourceY = image.height / 2 - size / 2;
-            this.context.drawImage(image, sourceX, sourceY, size, size, 20, 20, 160, 160);
-        },
-
-        drawImagePlaceholder: function () {
-            this.context.strokeStyle = "2px #888";
-            this.context.strokeRect(20, 20, 160, 160);
-            this.context.font = "12px sans-serif";
-            this.context.textBaseline = "middle";
-            this.context.textAlign = "center";
-            this.context.fillStyle = "black";
-            this.context.fillText("Drag your profile photo here", 100, 100);
-        },
-
-        drawTopText: function () {
-            this.context.font = "20px sans-serif";
-            this.context.fillStyle = "black";
-            this.context.textBaseline = "top";
-            this.context.textAlign = "left";
-            this.context.fillText("ContosoConf 2015 Speaker:", 200, 20);
-        },
-
-        drawSpeakerName: function () {
-            // TODO: Draw this.speakerName on the canvas
-            //       x, y = 200, 60
-            //       font = 40px sans-serif
-            //       fill style = black
-            //       text baseline = top
-            //       text align = left
-            this.context.font = "40px sans-serif";
-            this.context.fileStyle = "black";
-            this.context.baseLine = "top";
-            this.context.textAlign = "left";
-            this.context.fillText(this.speakerName,200, 60);
-        },
-
-        drawBarCode: function (text) {
-            text = "*" + text + "*"; // Wrap in "*" deliminators.
-            var encodings = {
-                "0": "bwbWBwBwb",
-                "1": "BwbWbwbwB",
-                "2": "bwBWbwbwB",
-                "3": "BwBWbwbwb",
-                "4": "bwbWBwbwB",
-                "5": "BwbWBwbwb",
-                "6": "bwBWBwbwb",
-                "7": "bwbWbwBwB",
-                "8": "BwbWbwBwb",
-                "9": "bwBWbwBwb",
-                "*": "bWbwBwBwb"
-            };
-            var x = 200, y = 140, height = 40, thick = 6, thin = 2;
-            for (var charIndex = 0; charIndex < text.length; charIndex++) {
-                var code = encodings[text[charIndex]];
-                for (var stripeIndex = 0; stripeIndex < code.length; stripeIndex++) {
-                    if (stripeIndex % 2 === 0) {
-                        this.context.fillStyle = "black";
-                    } else {
-                        this.context.fillStyle = "white";
-                    }
-                    var isWideStripe = code.charCodeAt(stripeIndex) < 91;
-                    if (isWideStripe) {
-                        this.context.fillRect(x, y, thick, height);
-                        x += thick;
-                    } else {
-                        this.context.fillRect(x, y, thin, height);
-                        x += thin;
-                    }
-                }
-
-                if (charIndex < text.length - 1) {
-                    // Space between each
-                    this.context.fillStyle = "white";
-                    this.context.fillRect(x, y, thin, height);
-                    x += thin;
-                }
-            }
-        },
-
-        isImageType: function (type) {
-            var imageTypes = ["image/jpeg", "image/jpg", "image/png"];
-            return imageTypes.indexOf(type) === 0;
-        },
-
-        readFile: function (file) {
-            var reading = $.Deferred();
-            var reader = new FileReader();
-            var self = this;
-            reader.onload = function (loadEvent) {
-                var fileDataUrl = loadEvent.target.result;
-                reading.resolveWith(self, [fileDataUrl]);
-            };
-            reader.readAsDataURL(file);
-            return reading;
-        },
-
-        loadImage: function (imageUrl) {
-            var loading = $.Deferred();
-            var image = new Image();
-            var self = this;
-            image.onload = function () {
-                loading.resolveWith(self, [image]);
-            };
-            image.src = imageUrl; // This starts the image loading
-            return loading;
+    var showRoomInfo = function (roomId) {
+        var infoDiv = document.getElementById(roomId + "-info");
+        if (currentInfoDiv) {
+            currentInfoDiv.style.display = "none";
         }
+        infoDiv.style.display = "block";
+        currentInfoDiv = infoDiv;
+    };
 
-    });
+    // TODO: Get the room elements in the svg element.
+    var rooms = document.querySelectorAll(".room");
 
-    var badgeElement = document.querySelector(".badge");
-    speakerBadgePage.create(badgeElement);
+    // TODO: Add a click event listener for each room element.
+    //       Call the showRoomInfo function, passing the clicked element's id property.
+    for (var i = 0; i < rooms.length; i++) {
+        var room = rooms[i];
+        room.addEventListener("click", function () {
+            showRoomInfo(this.id);
+        });
+    }
+
 }());
-
 // SIG // Begin signature block
 // SIG // MIIaVgYJKoZIhvcNAQcCoIIaRzCCGkMCAQExCzAJBgUr
 // SIG // DgMCGgUAMGcGCisGAQQBgjcCAQSgWTBXMDIGCisGAQQB
 // SIG // gjcCAR4wJAIBAQQQEODJBs441BGiowAQS9NQkAIBAAIB
-// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFGEM/26FeI4o
-// SIG // WoS/6zWHwNxvAdN0oIIVJjCCBJkwggOBoAMCAQICEzMA
+// SIG // AAIBAAIBAAIBADAhMAkGBSsOAwIaBQAEFC8yq1lg9PDV
+// SIG // oCeaazn5B5DMi4UpoIIVJjCCBJkwggOBoAMCAQICEzMA
 // SIG // AACdHo0nrrjz2DgAAQAAAJ0wDQYJKoZIhvcNAQEFBQAw
 // SIG // eTELMAkGA1UEBhMCVVMxEzARBgNVBAgTCldhc2hpbmd0
 // SIG // b24xEDAOBgNVBAcTB1JlZG1vbmQxHjAcBgNVBAoTFU1p
@@ -370,18 +201,18 @@
 // SIG // rrjz2DgAAQAAAJ0wCQYFKw4DAhoFAKCBvjAZBgkqhkiG
 // SIG // 9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgEL
 // SIG // MQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU
-// SIG // mQFwh6nqE5voow2yWuh7zdZxM68wXgYKKwYBBAGCNwIB
+// SIG // E2HarsFmy5MxgggtDLUnQ0j9IgIwXgYKKwYBBAGCNwIB
 // SIG // DDFQME6gJoAkAE0AaQBjAHIAbwBzAG8AZgB0ACAATABl
 // SIG // AGEAcgBuAGkAbgBnoSSAImh0dHA6Ly93d3cubWljcm9z
 // SIG // b2Z0LmNvbS9sZWFybmluZyAwDQYJKoZIhvcNAQEBBQAE
-// SIG // ggEAN1kFlD7l2v+U4LgCYI0Uadi5GsTii/ViW7vqob7G
-// SIG // keTNnAjEjKNWjkIiSMmu6JIwmyoQluXECIQdVJWLB92b
-// SIG // pNH3TiBrUJjxpdXZc23glVjjZaqDW4EKVH93QZYnt6Pp
-// SIG // z991nmbUj09SRsKZKlpffQi/R0yFDFaPjUtzHJnvhZHV
-// SIG // bxzPQwInwMw77G/TfiNFmsOC3eDeLHzc0STTZjI7sZ9/
-// SIG // GlkjWUegmHvG24AUjkrcw6kfCW7fGlaBhHvsYJLM25nE
-// SIG // OF9fQkPnv2sXnOXDjFno5mG/TJBpvY5R/P7ohdm8tIqy
-// SIG // 8mML1j+V8X3RBZJrlOUrcjJuWug2kGOcQtSQoKGCAh8w
+// SIG // ggEAQAZumqBy+l0qvxm9mANS7PqCwxQakH1r2n5CF7sQ
+// SIG // pc0PrEQB/ZU6TTH9r4nHhndbf4qzNWqv8ZB5pSLdB/Wz
+// SIG // dyvD/jwP/chpYCBAQqOhT+IbwzVhWLR1Hi4SHHNtvZGG
+// SIG // dwB2PyBmCSFqlM3uVeIkHlPl3YVrXnsVIMiStwTeeIZR
+// SIG // tC8GAMDQdhn6cEmAXAZLnKSBDip/l9imk06EK6uWSnJn
+// SIG // fjFrovVp7zP+R1/I7seVthlGjt4FRVznSi7Zjsg/+a6n
+// SIG // T9frdvpYbm519FsBL2q2gjaFaFBdhtem4SnzuLWjo9td
+// SIG // nNevw2FZyLJB+QYwY6tAT455UyBAxbpl8u+5BqGCAh8w
 // SIG // ggIbBgkqhkiG9w0BCQYxggIMMIICCAIBATCBhTB3MQsw
 // SIG // CQYDVQQGEwJVUzETMBEGA1UECBMKV2FzaGluZ3RvbjEQ
 // SIG // MA4GA1UEBxMHUmVkbW9uZDEeMBwGA1UEChMVTWljcm9z
@@ -389,14 +220,14 @@
 // SIG // ZnQgVGltZS1TdGFtcCBQQ0ECCmECkkoAAAAAACAwCQYF
 // SIG // Kw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
 // SIG // BwEwHAYJKoZIhvcNAQkFMQ8XDTEyMTExNTAwMDc1OFow
-// SIG // IwYJKoZIhvcNAQkEMRYEFOnf1gjDYJQ/47ij6pkRdkca
-// SIG // Ytq0MA0GCSqGSIb3DQEBBQUABIIBAKLB1B7fzllI1I+s
-// SIG // 10MDp09Q/90Gn/pcVZDuvVEebAcWEsioS8wrHYqelVlB
-// SIG // spPojDPg5nwGjP0aprct5Ievu+/z//HaPD3KZ/nGzoX+
-// SIG // xPzJ3Qm+a89tqLITMD0H7ezE1+GQWq+qYKD86GvFPRaV
-// SIG // 0g9h7bxOhMmhajEDUPPzsRNqPbjyJBWcRv0HCFjDoNDH
-// SIG // RKnkgEnMlj6bMnHCrV9NCspJnNI1PIFszmrIkGX25+rk
-// SIG // RffICu3SEdDcZ0LEg12IkzUZWfkF3b+R9AdJcZJR9Dhy
-// SIG // EYojobEMbplhO5m4SrAmQUvYDZeYpNjdUbENGyutWA7g
-// SIG // b+lelMvicw2hXCjTCZo=
+// SIG // IwYJKoZIhvcNAQkEMRYEFNS9hBMIFb7vHvtGwKj85rYD
+// SIG // Xb+vMA0GCSqGSIb3DQEBBQUABIIBAAMpVdsXaZGiNx6N
+// SIG // 32PHIXNETdkB5LAx+DtKxouhUndbm1luw8JNbxQn+i15
+// SIG // LdJA3Ld/qNAjz1vSVkDDd5gIwigT7Lm9ALwWJolzFevY
+// SIG // DAQYiMwyLDVDPk1ppbwO86ed13hP/PA+jCVIhJdJOUYM
+// SIG // hDm0/giV+EaprgKbidZXbA3xI7hMoKfCMw+y8AeBfdxc
+// SIG // UxMO9U27Wt/Ax5l1bUEcl2DEtFBFhXTmTRUmKj5JQIiN
+// SIG // m8NRPHeBUoZ75nirmdY2S5vJY90XVCu6dA9oblnzdzZz
+// SIG // x+mAD8lFmjl5+klsLgFFS/hZPlyTl9cNw+m6oEiEJIEY
+// SIG // mNAeMgghgBayrt6eAi0=
 // SIG // End signature block

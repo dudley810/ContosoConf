@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" manifest="/appcache.manifest">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>Speaker badge for ContosoConf</title>
@@ -37,8 +37,23 @@
     <section class="page-section badge">
         <div class="container">
             <h1>Create your speaker badge for ContosoConf</h1>
-            <p>Drag and drop your profile picture here...</p>
-            <img style="width: 300px; height: 300px; border: 1px solid #000" />
+            <div class="field">
+                <p><strong>Set your name first then drag your picture into your badge.</strong></p>
+                <label for="speaker-name">Speaker Name:</label>
+                <input type="text" id="speaker-name" name="SpeakerName" placeholder="Enter Full Name" />
+                <button>Change Badge Name</button>
+            </div>
+            <br />
+            <!--<p>Drag and drop your profile picture here...</p>
+            <img style="width: 300px; height: 300px; border: 1px solid #000" />-->
+            <!-- TODO: Add canvas here -->
+            <canvas width="500"
+                    height="200"
+                    style="border: 1px solid #888"
+                    data-speaker-id="111111"
+                    data-speaker-name="Your Name">
+
+            </canvas>
         </div>
     </section>
 
